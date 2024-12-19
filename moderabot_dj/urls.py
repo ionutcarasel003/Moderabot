@@ -25,4 +25,6 @@ urlpatterns = [
     path('violations/', views.violation_list, name='violation_list'),
     path('rules/', views.rule_list, name='rule_list'),
     path('users/', views.user_list, name='user_list'),
+    path('add_rule/', views.add_rule, name='add_rule'),
+    path('edit_rule/', views.edit_rule, name='edit_rule'),
 ]

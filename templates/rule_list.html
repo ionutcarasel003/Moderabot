@@ -33,6 +33,24 @@
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+        .add-rule-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px;
+        }
+        .add-rule-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .add-rule-button:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
@@ -43,7 +61,6 @@
                 <th>Rule ID</th>
                 <th>Description</th>
                 <th>Severity</th>
-                <th>Created At</th>
                 <th>Last Update</th>
                 <th>Status</th>
             </tr>
@@ -54,7 +71,6 @@
                 <td>{{ rule.rule_id }}</td>
                 <td>{{ rule.description }}</td>
                 <td>{{ rule.severity }}</td>
-                <td>{{ rule.createdAt }}</td>
                 <td>{{ rule.lastUpdate }}</td>
                 <td>{{ rule.status }}</td>
             </tr>
@@ -65,5 +81,8 @@
             {% endfor %}
         </tbody>
     </table>
+    <div class="add-rule-container">
+        <a href="{% url 'add_rule' %}" class="add-rule-button">Add Rule</a>
+    </div>
 </body>
 </html>

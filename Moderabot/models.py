@@ -4,7 +4,7 @@ class Rule(models.Model):
     rule_id = models.IntegerField(blank=True,primary_key=True,unique=True,null=False)
     created_at = models.DateTimeField(blank=True,null=False)
     lastUpdate = models.DateTimeField(blank=True)
-    action_id = models.IntegerField(blank=True,null=False)
+    severity = models.IntegerField(blank=True,null=False)
     status = models.BooleanField(blank=True,null=False)
     description = models.TextField(blank=True,null=False)
 
