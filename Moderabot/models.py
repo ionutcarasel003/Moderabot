@@ -1,12 +1,12 @@
 from django.db import models
 
 class Rule(models.Model):
-    rule_id = models.IntegerField(blank=True,primary_key=True,unique=True,null=False)
-    created_at = models.DateTimeField(blank=True,null=False)
-    lastUpdate = models.DateTimeField(blank=True)
-    severity = models.IntegerField(blank=True,null=False)
-    status = models.BooleanField(blank=True,null=False)
-    description = models.TextField(blank=True,null=False)
+    rule_id = models.AutoField(primary_key=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    lastUpdate = models.DateTimeField(auto_now=True)
+    severity = models.IntegerField()
+    status = models.BooleanField(default=True)
+    description = models.TextField()
 
     def __str__(self):
         return f"Rule {self.id}: {self.description}"
@@ -18,12 +18,12 @@ class Rule(models.Model):
 
 
 class User(models.Model):
-     user_id = models.IntegerField(blank=True,null=False,primary_key=True,unique=True)
-     username = models.TextField(blank=True,null=False,max_length=32)
-     severity_amount = models.IntegerField(blank=True,null=False)
-     status = models.BooleanField(blank=True,null=False)
-     role_id = models.IntegerField(blank=True,null=True)
-     password = models.TextField(blank=True,null=True,max_length=16)
+     user_id = models.BigIntegerField(primary_key=True)
+     username = models.CharField(max_length=32)
+     severity_amount = models.IntegerField(default=0)
+     status = models.BooleanField(default=True)
+     role_id = models.BigIntegerField(null=True)
+     password = models.CharField(max_length=128, null=True)
 
      def __str__(self):
          return self.username
@@ -33,10 +33,10 @@ class User(models.Model):
          db_table = 'user'
 
 class Violation(models.Model):
-    violation_id = models.IntegerField(blank=True,null=False,primary_key=True,unique=True)
-    user_id = models.IntegerField(blank=True,null=False)
-    rule_id = models.IntegerField(blank=True,null=False)
-    timestamp = models.DateTimeField(blank=True,null=False)
+    violation_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
+    rule = models.ForeignKey(Rule, on_delete=models.CASCADE, db_column='rule_id')
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Violation by {self.user_id} for rule {self.rule_id}"
