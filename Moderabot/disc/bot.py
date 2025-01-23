@@ -1,34 +1,18 @@
 import discord
+from asgiref.sync import sync_to_async
 from discord.ext import commands
 import os
-from .message_monitoring import MessageMonitor
-from asgiref.sync import sync_to_async
-from Moderabot.models import Rule, User, Violation
+
+from Moderabot.models import Rule, User
 
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 API_BASE_URL = "http://localhost:8000/"
-message_monitor = MessageMonitor()
 
 @bot.event
 async def on_ready():
     print('Bot is ready.')
-    # Importă modelele doar după ce Django e inițializat
-    from Moderabot.models import Rule, User, Violation
-    global Rule, User, Violation
-
-@bot.event
-async def on_message(message):
-    # Ignoră mesajele de la bot
-    if message.author == bot.user:
-        return
-        
-    # Procesează comenzile mai întâi
-    await bot.process_commands(message)
-    
-    # Apoi verifică mesajul pentru încălcări
-    # doar dacă nu este o comandă
-    if not message.content.startswith('!'):
-        await message_monitor.check_message(message)
+    # Încărcăm cog-ul de monitorizare
+    await bot.load_extension('Moderabot.disc.message_monitoring')
 
 @bot.command()
 async def ping(ctx):
@@ -76,12 +60,14 @@ async def status(ctx):
     except User.DoesNotExist:
         await ctx.send("Nu ai nicio încălcare înregistrată!")
 
+
 async def run_discord_bot():
     try:
         with open("token.txt") as f:
             token = f.read().strip()
         print("Token găsit cu succes!")
         await bot.start(token)
+        
     except FileNotFoundError:
         print("Error: Nu am găsit fișierul 'token.txt'.")
         return

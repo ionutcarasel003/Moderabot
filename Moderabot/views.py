@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
 from django.utils import timezone
+from django.contrib import messages
 
 from .models import User, Rule, Violation
 
@@ -57,10 +58,21 @@ def add_rule(request):
 
     return render(request, 'add_rule.html')
 
+def rules_list(request):
+    rules = Rule.objects.all()
+    return render(request, 'moderabot/rules_list.html', {'rules': rules})
 
-
-def edit_rule(request):
-    # rule = get_object_or_404(Rule, pk=rule_id)
-    # Rule.objects.update(rule=rule, severity=severity, status=status, description=description,last_update=timezone.now())
-    return render(request,'edit_rule.html')
+def edit_rule(request, rule_id):
+    rule = get_object_or_404(Rule, rule_id=rule_id)
+    
+    if request.method == 'POST':
+        # Update rule
+        rule.description = request.POST.get('description')
+        rule.severity = request.POST.get('severity')
+        rule.status = request.POST.get('status') == 'on'
+        rule.save()
+        messages.success(request, 'Regula a fost actualizată cu succes!')
+        return redirect('rules_list')
+        
+    return render(request, 'moderabot/edit_rule.html', {'rule': rule})
 
