@@ -36,7 +36,7 @@ class Violation(models.Model):
     violation_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
     rule = models.ForeignKey(Rule, on_delete=models.CASCADE, db_column='rule_id')
-    timestamp = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Violation by {self.user_id} for rule {self.rule_id}"

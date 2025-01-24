@@ -22,6 +22,13 @@ from Moderabot import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.rules_list, name='rules_list'),
+    path('', views.welcome, name='welcome'),
+    path('rules/', views.rules_list, name='rules_list'),
     path('rule/edit/<int:rule_id>/', views.edit_rule, name='edit_rule'),
+    path('users/', views.user_list, name='user_list'),
+    path('violations/', views.violation_list, name='violation_list'),
+    path('rule/delete/<int:rule_id>/', views.delete_rule, name='delete_rule'),
+    path('rule/add/', views.add_rule, name='add_rule'),
+    path('user/reset-severity/<int:user_id>/', views.reset_severity, name='reset_severity'),
+    path('user/mute/<int:user_id>/', views.mute_user, name='mute_user'),
 ]

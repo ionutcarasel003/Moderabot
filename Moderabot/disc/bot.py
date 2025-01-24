@@ -1,6 +1,7 @@
 import discord
 from asgiref.sync import sync_to_async
 from discord.ext import commands
+from discord import app_commands
 import os
 
 from Moderabot.models import Rule, User
@@ -8,10 +9,11 @@ from Moderabot.models import Rule, User
 bot = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 API_BASE_URL = "http://localhost:8000/"
 
+bot_instance = bot  # Adaugă această linie pentru a expune instanța botului
+
 @bot.event
 async def on_ready():
     print('Bot is ready.')
-    # Încărcăm cog-ul de monitorizare
     await bot.load_extension('Moderabot.disc.message_monitoring')
 
 @bot.command()
@@ -35,17 +37,25 @@ async def edit(ctx):
 @bot.command()
 async def rules(ctx):
     """Afișează toate regulile active"""
-    get_rules = sync_to_async(Rule.objects.filter)
-    rules = await get_rules(status=True)
-    
-    embed = discord.Embed(title="Reguli Active", color=discord.Color.blue())
-    for rule in rules:
-        embed.add_field(
-            name=f"Regula {rule.rule_id} (Severitate: {rule.severity})", 
-            value=rule.description, 
-            inline=False
-        )
-    await ctx.send(embed=embed)
+    try:
+        get_rules = sync_to_async(lambda: list(Rule.objects.filter(status=True)))
+        rules = await get_rules()
+        
+        if not rules:
+            await ctx.send("Nu există reguli active momentan.")
+            return
+            
+        embed = discord.Embed(title="Cuvinte nepermise", color=discord.Color.blue())
+        for rule in rules:
+            embed.add_field(
+                name=f" (Severitate: {rule.severity})",
+                value=rule.description, 
+                inline=False
+            )
+        await ctx.send(embed=embed)
+    except Exception as e:
+        print(f"Eroare la afișarea regulilor: {e}")
+        await ctx.send("A apărut o eroare la afișarea regulilor.")
 
 @bot.command()
 async def status(ctx):
@@ -59,6 +69,11 @@ async def status(ctx):
         await ctx.send(embed=embed)
     except User.DoesNotExist:
         await ctx.send("Nu ai nicio încălcare înregistrată!")
+
+
+
+
+
 
 
 async def run_discord_bot():
