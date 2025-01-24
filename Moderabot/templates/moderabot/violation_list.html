@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-4">
+  <h2>Lista Încălcărilor</h2>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID Încălcare</th>
+          <th>Utilizator</th>
+          <th>Regulă Încălcată</th>
+          <th>Data și Ora</th>
+          <th>Severitate</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for violation in violations %}
+        <tr>
+          <td>{{ violation.violation_id }}</td>
+          <td>{{ violation.user.username }}</td>
+          <td>{{ violation.rule.description }}</td>
+          <td>{{ violation.created_at|date:"d/m/Y H:i" }}</td>
+          <td>{{ violation.rule.severity }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

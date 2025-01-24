@@ -1,0 +1,53 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Lista Regulilor</h2>
+    <a href="{% url 'add_rule' %}" class="btn btn-success">
+      <i class="bi bi-plus"></i> Adaugă Regulă
+    </a>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Descriere</th>
+          <th>Severitate</th>
+          <th>Status</th>
+          <th>Acțiuni</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for rule in rules %}
+        <tr>
+          <td>{{ rule.rule_id }}</td>
+          <td>{{ rule.description }}</td>
+          <td>{{ rule.severity }}</td>
+          <td>{{ rule.status|yesno:"Activ,Inactiv" }}</td>
+          <td>
+            <div class="btn-group" role="group">
+              <a
+                href="{% url 'edit_rule' rule.rule_id %}"
+                class="btn btn-primary btn-sm"
+                >Editează</a
+              >
+              <form
+                method="post"
+                action="{% url 'delete_rule' rule.rule_id %}"
+                class="d-inline"
+                onsubmit="return confirm('Ești sigur că vrei să ștergi această regulă?');"
+              >
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm ms-1">
+                  Șterge
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

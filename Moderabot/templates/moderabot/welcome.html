@@ -1,0 +1,48 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-5">
+  <div class="text-center">
+    <h1 class="display-4">Bine ai venit la Moderabot</h1>
+    <p class="lead">Sistemul tău de moderare pentru Discord</p>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Reguli</h5>
+          <p class="card-text">
+            Gestionează regulile de moderare pentru server.
+          </p>
+          <a href="{% url 'rules_list' %}" class="btn btn-primary"
+            >Vezi Reguli</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Utilizatori</h5>
+          <p class="card-text">Vezi lista utilizatorilor și statusul lor.</p>
+          <a href="{% url 'user_list' %}" class="btn btn-primary"
+            >Vezi Utilizatori</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Încălcări</h5>
+          <p class="card-text">Monitorizează încălcările regulilor.</p>
+          <a href="{% url 'violation_list' %}" class="btn btn-primary"
+            >Vezi Încălcări</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

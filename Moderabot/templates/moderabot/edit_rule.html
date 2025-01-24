@@ -1,0 +1,43 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-4">
+  <h2>Editare Regulă</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="description" class="form-label">Descriere</label>
+      <input
+        type="text"
+        class="form-control"
+        id="description"
+        name="description"
+        value="{{ rule.description }}"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="severity" class="form-label">Severitate</label>
+      <input
+        type="number"
+        class="form-control"
+        id="severity"
+        name="severity"
+        value="{{ rule.severity }}"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="status" class="form-label">Status</label>
+      <select class="form-select" id="status" name="status">
+        <option value="true" {% if rule.status %}selected{% endif %}>
+          Activ
+        </option>
+        <option value="false" {% if not rule.status %}selected{% endif %}>
+          Inactiv
+        </option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Salvează</button>
+    <a href="{% url 'rules_list' %}" class="btn btn-secondary">Înapoi</a>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-4">
+  <h2>Adaugă Regulă Nouă</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="description" class="form-label">Descriere</label>
+      <input
+        type="text"
+        class="form-control"
+        id="description"
+        name="description"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="severity" class="form-label">Severitate</label>
+      <input
+        type="number"
+        class="form-control"
+        id="severity"
+        name="severity"
+        required
+      />
+    </div>
+    <div class="mb-3">
+      <label for="status" class="form-label">Status</label>
+      <select class="form-select" id="status" name="status">
+        <option value="true" selected>Activ</option>
+        <option value="false">Inactiv</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-success">Adaugă</button>
+    <a href="{% url 'rules_list' %}" class="btn btn-secondary">Înapoi</a>
+  </form>
+</div>
+{% endblock %}
